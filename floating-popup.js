@@ -14,7 +14,7 @@
 				}
 
 				function pinIt(){
-					// if(!$reference.is(':visible')) return;
+					if(!$reference.is(':visible')) return;
 					var $referenceOffset = $reference.offset(),
 						sw = parseInt($self.css('width')),
 						sh = parseInt($self.css('height'));
