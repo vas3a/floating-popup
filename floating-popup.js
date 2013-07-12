@@ -1,5 +1,4 @@
-
-n(doc, $, undefined){
+(function(doc, $, undefined){
 	var $body = $('body'), $window = $(window);
 
 	$.fn.floatable = function($reference, callableFunction, repin){
@@ -15,6 +14,7 @@ n(doc, $, undefined){
 				}
 
 				function pinIt(){
+					return if !$reference.is(':visible');
 					var $referenceOffset = $reference.offset(),
 						sw = parseInt($self.css('width')),
 						sh = parseInt($self.css('height'));
