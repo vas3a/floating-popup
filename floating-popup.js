@@ -14,7 +14,6 @@
 				}
 
 				function pinIt(){
-					console.log('test');
 					var $referenceOffset = $reference.offset(),
 						sw = parseInt($self.css('width')),
 						sh = parseInt($self.css('height'));
