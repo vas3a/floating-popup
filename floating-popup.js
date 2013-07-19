@@ -14,7 +14,7 @@
 				}
 
 				function pinIt(){
-					if(!$reference.is(':visible')) return;
+					if(!$self.is(':visible') || !$reference.is(':visible')) return;
 					var $referenceOffset = $reference.offset(),
 						sw = parseInt($self.css('width')),
 						sh = parseInt($self.css('height'));
@@ -43,6 +43,7 @@
 					delay = setTimeout(pinIt, 150);
 				}
 				
+				$reference.bind('click', pinIt);
 				$window.bind({'resize': pinIt, 'scroll': latePinIt});
 				pinIt();
 
