@@ -33,10 +33,8 @@
 						}),
 						left: $referenceOffset.left + (l < 0 && l || 0)
 					});
-					if($self.is(':visible') && typeof callableFunction === 'function'){
-						console.log('after',callableFunction);
+					if($self.is(':visible') && typeof callableFunction === 'function')
 						callableFunction();
-					}
 				}
 
 				function latePinIt () {
