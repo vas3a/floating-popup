@@ -16,8 +16,8 @@
 				function pinIt(){
 					if(!$reference.is(':visible')) return;
 					var $referenceOffset = $reference.offset(),
-						sw = parseInt($self.css('width')),
-						sh = parseInt($self.css('height'));
+						sw = parseInt($self.width()),
+						sh = parseInt($self.height());
 
 					l = //leftMarginCorrection = 
 						$window.width() + $window.scrollLeft() - (
@@ -33,10 +33,8 @@
 						}),
 						left: $referenceOffset.left + (l < 0 && l || 0)
 					});
-					if($self.is(':visible') && typeof callableFunction === 'function'){
-						console.log('after',callableFunction);
+					if($self.is(':visible') && typeof callableFunction === 'function')
 						callableFunction();
-					}
 				}
 
 				function latePinIt () {
@@ -44,7 +42,7 @@
 					delay = setTimeout(pinIt, 10);
 				}
 				
-				$reference.bind('click', latePinIt);
+				$reference.bind('click', pinIt);
 				$window.bind({'resize': pinIt, 'scroll': latePinIt});
 				pinIt();
 
