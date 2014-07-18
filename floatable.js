@@ -5,20 +5,24 @@
     $body = null;
     $window = $(window);
     position = function() {
-      var $reference, $self, left, offset, ref_height, self_height, self_width, top;
-      $reference = this.$reference, $self = this.$self;
+      var $reference, $self, left, offset, ref_height, ref_width, self_height, self_width, top, _callback;
+      $reference = this.$reference, $self = this.$self, _callback = this._callback;
       if (!$reference.is(':visible')) {
         return;
       }
-      offset = $reference.offset();
       self_width = parseInt($self.width());
       self_height = parseInt($self.height());
+      offset = $reference.offset();
       ref_height = parseInt($reference.outerHeight());
+      ref_width = parseInt($reference.outerWidth());
       left = $window.width() + $window.scrollLeft() - (offset.left + self_width + 15);
+      left = offset.left + Math.min(0, left);
+      left = Math.max(left, offset.left + ref_width - self_width);
       top = $window.height() + $window.scrollTop() - (offset.top + ref_height + self_height + 15);
+      top = top >= 0 && (offset.top + ref_height) || (offset.top - self_height - 15);
       $self.css({
-        top: top >= 0 && (offset.top + ref_height) || (offset.top - self_height - 15),
-        left: offset.left + Math.min(0, left)
+        top: top,
+        left: left
       });
       if ($self.is(':visible')) {
         return typeof _callback === "function" ? _callback() : void 0;
@@ -55,7 +59,8 @@
         }
         $reference.bind('click', _position = position.bind({
           $reference: $reference,
-          $self: $self
+          $self: $self,
+          _callback: _callback
         }));
         $window.bind({
           'resize': _position,

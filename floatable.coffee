@@ -3,21 +3,25 @@ do (doc = document, $ = jQuery) ->
 	$window = $ window
 
 	position = ->
-		{$reference, $self} = this
+		{$reference, $self, _callback} = this
 
 		return unless $reference.is ':visible'
 
-		offset = $reference.offset()
 		self_width  = parseInt $self.width()
 		self_height = parseInt $self.height()
+
+		offset = $reference.offset()
 		ref_height = parseInt $reference.outerHeight()
+		ref_width = parseInt $reference.outerWidth()
 
 		left = $window.width() + $window.scrollLeft() - (offset.left + self_width + 15)
-		top  = $window.height() + $window.scrollTop() - (offset.top + ref_height + self_height + 15)
+		left = offset.left + Math.min 0, left
+		left = Math.max left, offset.left + ref_width - self_width
 
-		$self.css
-			top: top >= 0 and (offset.top + ref_height) or (offset.top - self_height - 15)
-			left: offset.left + Math.min 0, left
+		top  = $window.height() + $window.scrollTop() - (offset.top + ref_height + self_height + 15)
+		top  = top >= 0 and (offset.top + ref_height) or (offset.top - self_height - 15)
+
+		$self.css {top, left}
 
 		_callback?() if $self.is ':visible'
 
@@ -37,7 +41,7 @@ do (doc = document, $ = jQuery) ->
 		return if $self.data 'floatable'
 
 		$body.append $self.remove() if repin
-		$reference.bind 'click', _position = position.bind {$reference, $self}
+		$reference.bind 'click', _position = position.bind {$reference, $self, _callback}
 		$window.bind 'resize': _position, 'scroll': _debounce _position
 		_position()
 
