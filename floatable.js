@@ -4,9 +4,8 @@
     var $body, $window, position, _debounce;
     $body = null;
     $window = $(window);
-    position = function() {
-      var $reference, $self, left, offset, ref_height, ref_width, self_height, self_width, top, _callback;
-      $reference = this.$reference, $self = this.$self, _callback = this._callback;
+    position = function($reference, $self, _callback) {
+      var left, offset, ref_height, ref_width, self_height, self_width, top;
       if (!$reference.is(':visible')) {
         return;
       }
@@ -51,17 +50,14 @@
         var $self, _position;
         $self = $(this);
         $body || ($body = $('body'));
+        _position = position.bind(null, $reference, $self, _callback);
         if ($self.data('floatable')) {
-          return;
+          return _position();
         }
         if (repin) {
           $body.append($self.remove());
         }
-        $reference.bind('click', _position = position.bind({
-          $reference: $reference,
-          $self: $self,
-          _callback: _callback
-        }));
+        $reference.bind('click', _position);
         $window.bind({
           'resize': _position,
           'scroll': _debounce(_position)

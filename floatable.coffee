@@ -2,9 +2,7 @@ do (doc = document, $ = jQuery) ->
 	$body = null
 	$window = $ window
 
-	position = ->
-		{$reference, $self, _callback} = this
-
+	position = ($reference, $self, _callback) ->
 		return unless $reference.is ':visible'
 
 		self_width  = parseInt $self.width()
@@ -37,11 +35,12 @@ do (doc = document, $ = jQuery) ->
 	$.fn.floatable = ($reference, _callback, repin = true) -> @each ->
 		$self = $ this
 		$body or= $ 'body'
+		_position = position.bind null, $reference, $self, _callback
 
-		return if $self.data 'floatable'
+		return do _position if $self.data 'floatable'
 
 		$body.append $self.remove() if repin
-		$reference.bind 'click', _position = position.bind {$reference, $self, _callback}
+		$reference.bind 'click', _position
 		$window.bind 'resize': _position, 'scroll': _debounce _position
 		_position()
 
